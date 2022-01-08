@@ -1,4 +1,5 @@
 # HotelandWeatherApp
+**Hotel screens will be added as soon as possible**<dt>
 Hotel and weather information of cities
 
 ![](images/weather.gif) <dt>
