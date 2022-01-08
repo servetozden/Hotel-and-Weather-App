@@ -9,10 +9,12 @@ import androidx.databinding.DataBindingUtil;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.foursquareproject.databinding.ActivityWeatherBinding;
+import com.example.foursquareproject.viewmodel.MainViewModel;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -49,6 +52,7 @@ public class WeatherActivity extends AppCompatActivity {
     static int indexfor=5;
     static String lat;
     static String lon;
+    MainViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,13 @@ public class WeatherActivity extends AppCompatActivity {
         weatherImage = binding.forecastIcon1;
         client = LocationServices.getFusedLocationProviderClient(this);
         time=binding.textDateValue;
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String nameCity = preferences.getString("city", "");
+        String personName = preferences.getString("person", "");
+
+        binding.textName.setText(personName.toUpperCase());
+
 
         if (ActivityCompat.checkSelfPermission(WeatherActivity.this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             if (ActivityCompat.shouldShowRequestPermissionRationale(WeatherActivity.this, ACCESS_FINE_LOCATION)){
@@ -87,7 +98,7 @@ public class WeatherActivity extends AppCompatActivity {
 
                     WeatherByLatLon(lat,lon);
                 }else{
-                    getCurrentWeather("Mersin");
+                    getCurrentWeather(nameCity);
                 }
 
             }
@@ -98,44 +109,11 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case 1: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.checkSelfPermission(WeatherActivity.this,
-                            ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
-                        client.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                if (location != null) {
-
-                                    double latitude = Math.round(location.getLatitude() * 100.0) / 100.0;
-                                    lat = String.valueOf(latitude);
-
-                                    double longitude = Math.round(location.getLongitude() * 100.0) / 100.0;
-                                    lon = String.valueOf(longitude);
-
-                                    WeatherByLatLon(lat, lon);
-                                }
-                            }
-                        });
-                    }
-                } else {
-                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
-                }
-                return;
-            }
-        }
-    }
-
 
     public void getCurrentWeather(String city){
         OkHttpClient client = new OkHttpClient();
         Request request=new Request.Builder()
-                .url("https://api.openweathermap.org/data/2.5/forecast?q="+city+"&appid=API_KEY")
+                .url("https://api.openweathermap.org/data/2.5/forecast?q="+city+"&appid=3e80cc4fe44b2f34fa58d2823f3264d0")
                 .get().build();
 
         StrictMode.ThreadPolicy policy=new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -177,7 +155,7 @@ public class WeatherActivity extends AppCompatActivity {
     private void WeatherByLatLon(String lat,String lon){
         OkHttpClient client=new OkHttpClient();
         Request request=new Request.Builder()
-                .url("https://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid=API_KEY")
+                .url("https://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid=3e80cc4fe44b2f34fa58d2823f3264d0")
                 .get().build();
         StrictMode.ThreadPolicy policy=new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -220,7 +198,8 @@ public class WeatherActivity extends AppCompatActivity {
 
                         JSONObject Main=objects.getJSONObject("main");
                         double temparature=Main.getDouble("temp");
-                        String Temp=Math.round(temparature)+"°C";
+                        double temmp = temparature /10;
+                        String Temp=Math.round(temmp)+"°C";
                         double Humidity=Main.getDouble("humidity");
                         String hum=Math.round(Humidity)+"%";
                         double FeelsLike=Main.getDouble("feels_like");
@@ -305,7 +284,8 @@ public class WeatherActivity extends AppCompatActivity {
 
                 JSONObject Main=object.getJSONObject("main");
                 double temparature=Main.getDouble("temp");
-                String Temp=Math.round(temparature)+"°";
+                double temp1 = temparature /10;
+                String Temp=Math.round(temp1)+"°";
                 setDataText(forecastTemp,Temp);
 
                 JSONArray array=object.getJSONArray("weather");
@@ -328,7 +308,9 @@ public class WeatherActivity extends AppCompatActivity {
 
                 JSONObject Main=object.getJSONObject("main");
                 double temparature=Main.getDouble("temp");
-                String Temp=Math.round(temparature)+"°";
+                double temp1 = temparature /10;
+                String Temp=Math.round(temp1)+"°";
+
                 setDataText(forecastTemp,Temp);
 
                 JSONArray array=object.getJSONArray("weather");
