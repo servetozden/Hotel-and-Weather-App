@@ -113,7 +113,7 @@ public class WeatherActivity extends AppCompatActivity {
     public void getCurrentWeather(String city){
         OkHttpClient client = new OkHttpClient();
         Request request=new Request.Builder()
-                .url("https://api.openweathermap.org/data/2.5/forecast?q="+city+"&appid=3e80cc4fe44b2f34fa58d2823f3264d0")
+                .url("https://api.openweathermap.org/data/2.5/forecast?q="+city+"&appid=API_KEY")
                 .get().build();
 
         StrictMode.ThreadPolicy policy=new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -155,7 +155,7 @@ public class WeatherActivity extends AppCompatActivity {
     private void WeatherByLatLon(String lat,String lon){
         OkHttpClient client=new OkHttpClient();
         Request request=new Request.Builder()
-                .url("https://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid=3e80cc4fe44b2f34fa58d2823f3264d0")
+                .url("https://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid=API_KEY")
                 .get().build();
         StrictMode.ThreadPolicy policy=new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
