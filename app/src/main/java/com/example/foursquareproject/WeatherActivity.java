@@ -198,8 +198,7 @@ public class WeatherActivity extends AppCompatActivity {
 
                         JSONObject Main=objects.getJSONObject("main");
                         double temparature=Main.getDouble("temp");
-                        double temmp = temparature /10;
-                        String Temp=Math.round(temmp)+"°C";
+                        String Temp=Math.round(temparature)+"°C";
                         double Humidity=Main.getDouble("humidity");
                         String hum=Math.round(Humidity)+"%";
                         double FeelsLike=Main.getDouble("feels_like");
@@ -284,8 +283,7 @@ public class WeatherActivity extends AppCompatActivity {
 
                 JSONObject Main=object.getJSONObject("main");
                 double temparature=Main.getDouble("temp");
-                double temp1 = temparature /10;
-                String Temp=Math.round(temp1)+"°";
+                String Temp=Math.round(temparature)+"°";
                 setDataText(forecastTemp,Temp);
 
                 JSONArray array=object.getJSONArray("weather");
@@ -308,8 +306,7 @@ public class WeatherActivity extends AppCompatActivity {
 
                 JSONObject Main=object.getJSONObject("main");
                 double temparature=Main.getDouble("temp");
-                double temp1 = temparature /10;
-                String Temp=Math.round(temp1)+"°";
+                String Temp=Math.round(temparature)+"°";
 
                 setDataText(forecastTemp,Temp);
 
