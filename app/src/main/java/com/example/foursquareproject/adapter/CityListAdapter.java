@@ -44,6 +44,7 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.ViewHo
         });
 
     }
+    
 
     @Override
     public int getItemCount() {
